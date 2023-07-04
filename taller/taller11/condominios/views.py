@@ -7,17 +7,12 @@ from condominios.models import *
 from condominios.forms import *
 
 def index(request):
-    
-    return render(request, 'index.html')
 
-
-def listadoParroquias(request):
+    edificios = Edificio.objects.all()
     
-    parroquias = Parroquia.objects.all()
+    informacion_template = {'edificios': edificios}
     
-    titulo = "Listado de parroquias y sus barrios"
-    informacion_template = {'parroquias': parroquias, 'mititulo': titulo}
-    return render(request, 'listadoParroquias.html', informacion_template)
+    return render(request, 'index.html', informacion_template)
 
 def crearEdificio(request):
     
@@ -26,69 +21,66 @@ def crearEdificio(request):
         print(formulario.errors)
         if formulario.is_valid():
             formulario.save()
-            return redirect(listadoParroquias)
+            return redirect(index)
     else:
         formulario = EdificioForm()
     diccionario = {'formulario': formulario}
 
     return render(request, 'crearEdificio.html', diccionario)
 
-def editarParroquia(request, id):
+def editarEdificio(request, id):
     
-    parroquia = Parroquia.objects.get(pk=id)
+    edificio = Edificio.objects.get(pk=id)
     if request.method=='POST':
-        formulario = ParroquiaForm(request.POST, instance=parroquia)
+        formulario = EdificioForm(request.POST, instance=edificio)
         print(formulario.errors)
         if formulario.is_valid():
             formulario.save()
-            return redirect(listadoParroquias)
+            return redirect(index)
     else:
-        formulario = ParroquiaForm(instance=parroquia)
+        formulario = EdificioForm(instance=edificio)
     diccionario = {'formulario': formulario}
 
-    return render(request, 'editarParroquia.html', diccionario)
+    return render(request, 'editarEdificio.html', diccionario)
 
-def listadoBarrios(request):
+def eliminarEdificio(request, id):
     
-    barrios = Barrio.objects.all()
-    
-    titulo = "Listado de Barrios"
-    informacion_template = {'barrios': barrios,
-    'mititulo': titulo}
-    return render(request, 'listadoBarrios.html', informacion_template)
+    edificio = Edificio.objects.get(pk=id)
+    edificio.delete()
+    return redirect(index)
 
-def crearBarrio(request, id):
+def crearDepartamento(request, id):
     
-    parroquia = Parroquia.objects.get(pk=id)
+    edificio = Edificio.objects.get(pk=id)
     if request.method=='POST':
-        formulario = BarrioForm(parroquia, request.POST)
+        formulario = DepartamentoForm(request.POST)
         print(formulario.errors)
         if formulario.is_valid():
             formulario.save()
-            return redirect(listadoParroquias)
+            return redirect(index)
     else:
-        formulario = BarrioForm(parroquia)
-    diccionario = {'formulario': formulario, 'parroquia': parroquia}
+        formulario = DepartamentoForm(instance=edificio)
+    diccionario = {'formulario': formulario, 'edificio': edificio}
 
-    return render(request, 'crearBarrio.html', diccionario)
+    return render(request, 'crearDepartamento.html', diccionario)
 
-def editarBarrio(request, id):
+def editarDepartamento(request, id):
     
-    barrio = Barrio.objects.get(pk=id)
+    departamento = Departamento.objects.get(pk=id)
     if request.method=='POST':
-        formulario = BarrioEditForm(request.POST, instance=barrio)
+        formulario = DepartamentoForm(request.POST, instance=departamento)
         print(formulario.errors)
         if formulario.is_valid():
             formulario.save()
-            return redirect(listadoParroquias)
+            return redirect(index)
     else:
-        formulario = BarrioEditForm(instance=barrio)
+        formulario = DepartamentoForm(instance=departamento)
     diccionario = {'formulario': formulario}
 
-    return render(request, 'editarBarrio.html', diccionario)
+    return render(request, 'editarDepartamento.html', diccionario)
 
-def eliminarBarrio(request, id):
+def eliminarDepartamento(request, id):
     
-    barrio = Barrio.objects.get(pk=id)
-    barrio.delete()
-    return redirect(listadoParroquias)
+    departamento = Departamento.objects.get(pk=id)
+    departamento.delete()
+    return redirect(index)

@@ -11,7 +11,7 @@ admin.site.register(Edificio, EdificioAdmin)
 
 class DepartamentoAdmin(admin.ModelAdmin):
 
-    list_display = ('nombre', 'costo', 'numCuartos', 'edificio')
-    search_fields = ('nombre', 'costo')
+    list_display = ('nombreP', 'costo', 'numCuartos', 'edificio')
+    search_fields = ('nombreP', 'costo')
 
 admin.site.register(Departamento, DepartamentoAdmin)
